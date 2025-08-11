@@ -15,41 +15,43 @@ jobs:
     steps:
       # Step 1: Checkout the code
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Step 2: Set up Node.js environment
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '16'
 
       # Step 3: Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       # Step 4: Install Playwright browsers
       - name: Install Playwright browsers
-        run: npx playwright install
+        run: npx playwright install --with-deps
 
-      # Step 5: Run Playwright tests and generate report
+      # Step 5: Run Playwright tests and generate HTML report
       - name: Run Playwright tests
         run: npx playwright test --reporter=html
 
-      # Step 6: Upload test results as an artifact
-      - name: Upload test results
-        uses: actions/upload-artifact@v3
-        with:
-          name: playwright-report
-          path: playwright-report/
-
-      # Step 7: Always upload screenshots, videos, and traces for debugging
-      - name: Upload Playwright artifacts
+      # Step 6: Upload HTML report
+      - name: Upload Playwright HTML report
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: playwright-artifacts
+          name: playwright-html-report
+          path: playwright-report/
+
+      # Step 7: Upload Playwright artifacts (screenshots, videos, traces)
+      - name: Upload Playwright debugging artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-debug-artifacts
           path: |
             test-results/
+            playwright-report/
             traces/
             videos/
             screenshots/
