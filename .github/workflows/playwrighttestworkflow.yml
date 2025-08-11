@@ -38,20 +38,19 @@ jobs:
       # Step 6: Upload HTML report
       - name: Upload Playwright HTML report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-html-report
           path: playwright-report/
 
-      # Step 7: Upload Playwright artifacts (screenshots, videos, traces)
-      - name: Upload Playwright debugging artifacts
+      # Step 7: Upload Playwright debugging artifacts
+      - name: Upload Playwright debug artifacts
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-debug-artifacts
           path: |
             test-results/
-            playwright-report/
             traces/
             videos/
             screenshots/
